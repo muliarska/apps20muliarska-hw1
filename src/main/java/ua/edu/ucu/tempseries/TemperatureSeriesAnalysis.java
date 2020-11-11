@@ -7,7 +7,7 @@ public class TemperatureSeriesAnalysis {
 
     private double[] temperatureSeries;
     private int tempLen;
-    private final double LOWERLIMIT = -273.0;
+    private final double lowerLimit = -273.0;
 
 
     public TemperatureSeriesAnalysis() {
@@ -160,7 +160,7 @@ public class TemperatureSeriesAnalysis {
 
         int k = 0;
         while (k < temps.length) {
-            if (temps[k] < LOWERLIMIT) {
+            if (temps[k] < lowerLimit) {
                 throw new InputMismatchException();
             }
             newSeries[k+tempLen] = temps[k];
