@@ -98,7 +98,15 @@ public class TemperatureSeriesAnalysis {
 
     private double[] findTemps(double tempValue, boolean flag) {
         isValidLen();
-        double[] temps = new double[tempLen];
+
+        int newLen = 0;
+        for (int i=0; i < tempLen; i++) {
+            if (flag ^ comparison(temperatureSeries[i], tempValue)) {
+                newLen++;
+            }
+        }
+
+        double[] temps = new double[newLen];
         int counter = 0;
 
         for (int i=0; i < tempLen; i++) {
@@ -125,33 +133,32 @@ public class TemperatureSeriesAnalysis {
     }
 
     public int addTemps(double... temps) {
-        int newLen = tempLen * 2;
+        int newLen = temperatureSeries.length;
         if (tempLen == 0) {
             newLen = 1;
         }
         double[] newSeries = new double[newLen];
+        double[] temporarySeries;
 
-        int i = 0;
-        int j = 0;
 
-        while(j < temps.length) {
-            // increase size of the array
-            while (i < tempLen) {
-                newSeries[i] = temperatureSeries[i];
-                i++;
-            }
+        while (newSeries.length < tempLen + temps.length) {
+            newSeries = new double[newSeries.length * 2];
 
-            // add new temps
-            while (j < temps.length || i < temperatureSeries.length) {
-                if (temps[j] < -273) {
-                    throw new InputMismatchException();
-                }
-                newSeries[i] = temps[j];
+            int j = 0;
+            while (j < temperatureSeries.length) {
+                newSeries[j] = temperatureSeries[j];
+                j++;
             }
         }
 
+        int k = 0;
+        while (k < temps.length) {
+            newSeries[k+tempLen] = temps[k];
+            k++;
+        }
+
         temperatureSeries = newSeries;
-        tempLen = i;
+        tempLen = tempLen + temps.length;
         return tempLen;
     }
 }

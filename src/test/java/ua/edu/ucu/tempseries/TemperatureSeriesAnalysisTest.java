@@ -23,6 +23,8 @@ public class TemperatureSeriesAnalysisTest {
 
     }
 
+
+    // TEST AVERAGE
     @Test
     public void testAverageWithOneElementArray() {
         double expResult = -1.0;
@@ -51,6 +53,7 @@ public class TemperatureSeriesAnalysisTest {
     }
 
 
+    // TEST DEVIATION
     @Test
     public void testDeviationWithOneElementArray() {
         double expResult = 0.0;
@@ -79,6 +82,7 @@ public class TemperatureSeriesAnalysisTest {
     }
 
 
+    // TEST MIN
     @Test
     public void testMinWithOneElementArray() {
         double expResult = -1.0;
@@ -107,6 +111,65 @@ public class TemperatureSeriesAnalysisTest {
     }
 
 
+    // TEST MAX
+    @Test
+    public void testMaxWithOneElementArray() {
+        double expResult = -1.0;
+
+        // call tested method
+        double actualResult = seriesAnalysisOneEl.max();
+
+        // compare expected result with actual result
+        assertEquals(expResult, actualResult, 0.00001);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testMaxWithEmptyArray() {
+
+        // expect exception here
+        seriesAnalysisEmpty.max();
+    }
+
+    @Test
+    public void testMax() {
+        double expResult = 5.0;
+
+        double actualResult = seriesAnalysisManyEl.max();
+
+        assertEquals(expResult, actualResult, 0.00001);
+    }
+
+
+    // TEST FIND CLOSEST TO ZERO
+    @Test
+    public void testFindTempClosestToZeroWithOneElementArray() {
+        double expResult = -1.0;
+
+        // call tested method
+        double actualResult = seriesAnalysisOneEl.findTempClosestToZero();
+
+        // compare expected result with actual result
+        assertEquals(expResult, actualResult, 0.00001);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindTempClosestToZeroWithEmptyArray() {
+
+        // expect exception here
+        seriesAnalysisEmpty.findTempClosestToZero();
+    }
+
+    @Test
+    public void testFindTempClosestToZero() {
+        double expResult = 1.0;
+
+        double actualResult = seriesAnalysisManyEl.findTempClosestToZero();
+
+        assertEquals(expResult, actualResult, 0.00001);
+    }
+
+
+    // TEST FIND CLOSEST TO VALUE
     @Test
     public void testFindTempClosestToValueWithOneElementArray() {
          double expResult = -1.0;
@@ -135,14 +198,16 @@ public class TemperatureSeriesAnalysisTest {
     }
 
 
+    // TEST FIND TEMPS LESS THAN VALUE
     @Test
     public void testFindTempsLessThenToValueWithOneElementArray() {
 
         // call tested method
         double[] actualResult = seriesAnalysisOneEl.findTempsLessThen(0.0);
+        double[] expResult = {-1.0};
 
         // compare expected result with actual result
-        assertEquals(actualResult[0], -1.0, 0.00001);
+        assertArrayEquals(expResult, actualResult, 0.00001);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -156,12 +221,43 @@ public class TemperatureSeriesAnalysisTest {
     public void testFindTempsLessThen() {
 
         double[] actualResult = seriesAnalysisManyEl.findTempsLessThen(2.0);
+        double[] expResult = {-5.0, 1.0};
 
-        assertEquals(actualResult[0], -5.0, 0.00001);
-        assertEquals(actualResult[1], 1.0, 0.00001);
+        // compare expected result with actual result
+        assertArrayEquals(expResult, actualResult, 0.00001);
     }
 
 
+    // TEST FIND TEMPS GREATER THAN VALUE
+    @Test
+    public void testFindTempsGreaterThenToValueWithOneElementArray() {
+
+        // call tested method
+        double[] actualResult = seriesAnalysisOneEl.findTempsGreaterThen(-2.0);
+        double[] expResult = {-1.0};
+
+        // compare expected result with actual result
+        assertArrayEquals(expResult, actualResult, 0.00001);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindTempsGreaterThenWithEmptyArray() {
+
+        // expect exception here
+        seriesAnalysisEmpty.findTempsGreaterThen(1.0);
+    }
+
+    @Test
+    public void testFindTempsGreaterThen() {
+
+        double[] actualResult = seriesAnalysisManyEl.findTempsGreaterThen(2.0);
+        double[] expResult = {3.0, 5.0};
+
+        assertArrayEquals(expResult, actualResult, 0.00001);
+    }
+
+
+    // TEST SUMMARY STATISTICS
     @Test
     public void testSummaryStatisticsWithOneElementArray() {
         double expAvg = -1.0;
@@ -199,6 +295,45 @@ public class TemperatureSeriesAnalysisTest {
         assertEquals(statistics.devTemp, expDev, 0.00001);
         assertEquals(statistics.minTemp, expMin, 0.00001);
         assertEquals(statistics.maxTemp, expMax, 0.00001);
+    }
+
+
+    // TEST ADD TEMPS
+    @Test
+    public void testAddTempsWithOneElementArray() {
+        double[] newSeries = {1.0, 4.0};
+
+        seriesAnalysisOneEl.addTemps(newSeries);
+
+        double[] expResult = {-1.0, 1.0, 4.0, 0.0};
+        double[] actualResult = seriesAnalysisOneEl.temperatureSeries;
+
+        assertArrayEquals(expResult, actualResult, 0.00001);
+    }
+
+    @Test
+    public void testAddTempsWithEmptyArray() {
+        double[] newSeries = {1.0, 4.0};
+
+        seriesAnalysisEmpty.addTemps(newSeries);
+
+        double[] expResult = {1.0, 4.0};
+        double[] actualResult = seriesAnalysisEmpty.temperatureSeries;
+
+        assertArrayEquals(expResult, actualResult, 0.00001);
+    }
+
+
+    @Test
+    public void testAddTemps() {
+        double[] newSeries = {1.0, 4.0};
+
+        seriesAnalysisManyEl.addTemps(newSeries);
+
+        double[] expResult = {3.0, -5.0, 1.0, 5.0, 1.0, 4.0, 0.0, 0.0};
+        double[] actualResult = seriesAnalysisManyEl.temperatureSeries;
+
+        assertArrayEquals(expResult, actualResult, 0.00001);
     }
 
 }
