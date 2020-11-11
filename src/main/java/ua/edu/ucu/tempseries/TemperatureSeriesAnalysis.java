@@ -9,11 +9,6 @@ public class TemperatureSeriesAnalysis {
     private int tempLen;
 
 
-    public double[] getTemperatureSeries() {
-        return temperatureSeries;
-    }
-
-
     public TemperatureSeriesAnalysis() {
         this.temperatureSeries = new double[0];
     }
@@ -22,6 +17,10 @@ public class TemperatureSeriesAnalysis {
     public TemperatureSeriesAnalysis(double[] temperatureSeries) {
         this.temperatureSeries = temperatureSeries;
         this.tempLen = temperatureSeries.length;
+    }
+
+    public double[] getTemperatureSeries() {
+        return temperatureSeries;
     }
 
     private void isValidLen() {
@@ -46,7 +45,8 @@ public class TemperatureSeriesAnalysis {
         double average = average();
 
         for (int i = 0; i < tempLen; i++) {
-            deviation += (temperatureSeries[i] - average) * (temperatureSeries[i] - average);
+            deviation += (temperatureSeries[i] - average) *
+                    (temperatureSeries[i] - average);
         }
 
         return Math.sqrt(deviation/tempLen);
@@ -90,8 +90,8 @@ public class TemperatureSeriesAnalysis {
         for (int i = 1; i < tempLen; i++) {
             double currDistance = Math.abs(temperatureSeries[i] - tempValue);
 
-            if (currDistance == distance &&
-                    temperatureSeries[i] > closestValue) {
+            if (currDistance == distance
+                    && temperatureSeries[i] > closestValue) {
                 closestValue = temperatureSeries[i];
             }
 
@@ -158,8 +158,9 @@ public class TemperatureSeriesAnalysis {
         }
 
         int k = 0;
+        double lowerLimit = -273.0;
         while (k < temps.length) {
-            if (temps[k] < -273.0) {
+            if (temps[k] < lowerLimit) {
                 throw new InputMismatchException();
             }
             newSeries[k+tempLen] = temps[k];
