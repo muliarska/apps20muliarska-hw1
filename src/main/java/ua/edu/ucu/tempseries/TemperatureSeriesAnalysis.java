@@ -7,6 +7,7 @@ public class TemperatureSeriesAnalysis {
 
     private double[] temperatureSeries;
     private int tempLen;
+    double lowerLimit = -273.0;
 
 
     public TemperatureSeriesAnalysis() {
@@ -45,8 +46,8 @@ public class TemperatureSeriesAnalysis {
         double average = average();
 
         for (int i = 0; i < tempLen; i++) {
-            deviation += (temperatureSeries[i] - average) *
-                    (temperatureSeries[i] - average);
+            deviation += (temperatureSeries[i] - average)
+                    * (temperatureSeries[i] - average);
         }
 
         return Math.sqrt(deviation/tempLen);
@@ -116,8 +117,8 @@ public class TemperatureSeriesAnalysis {
         double[] temps = new double[newLen];
         int counter = 0;
 
-        for (int i=0; i < tempLen; i++) {
-            if (flag ^ comparison(temperatureSeries[i], tempValue)){
+        for (int i = 0; i < tempLen; i++) {
+            if (flag ^ comparison(temperatureSeries[i], tempValue)) {
                 temps[counter] = temperatureSeries[i];
                 counter++;
             }
@@ -158,7 +159,6 @@ public class TemperatureSeriesAnalysis {
         }
 
         int k = 0;
-        double lowerLimit = -273.0;
         while (k < temps.length) {
             if (temps[k] < lowerLimit) {
                 throw new InputMismatchException();
