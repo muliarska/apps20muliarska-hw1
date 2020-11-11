@@ -1,11 +1,17 @@
 package ua.edu.ucu.tempseries;
 
+
 import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
 
-    public double[] temperatureSeries;
-    public int tempLen;
+    private double[] temperatureSeries;
+    private int tempLen;
+
+
+    public double[] getTemperatureSeries() {
+        return temperatureSeries;
+    }
 
 
     public TemperatureSeriesAnalysis() {
@@ -28,7 +34,7 @@ public class TemperatureSeriesAnalysis {
     public double average() {
         isValidLen();
         double average = 0;
-        for (int i=0; i < tempLen; i++) {
+        for (int i = 0; i < tempLen; i++) {
             average += temperatureSeries[i];
         }
         return average / tempLen;
@@ -39,15 +45,15 @@ public class TemperatureSeriesAnalysis {
         double deviation = 0;
         double average = average();
 
-        for (int i=0; i < tempLen; i++) {
-            deviation += Math.pow((temperatureSeries[i] - average), 2);
+        for (int i = 0; i < tempLen; i++) {
+            deviation += (temperatureSeries[i] - average) * (temperatureSeries[i] - average);
         }
 
         return Math.sqrt(deviation/tempLen);
     }
 
-    private boolean comparison(double el1, double el2) {
-        if (el1 < el2) {
+    private boolean comparison(double elFirst, double elSecond) {
+        if (elFirst < elSecond) {
             return true;
         }
         return false;
@@ -56,7 +62,7 @@ public class TemperatureSeriesAnalysis {
     private double tempMinMax(boolean flag) {
         isValidLen();
         double limitTemp = temperatureSeries[0];
-        for (int i=1; i < tempLen; i++) {
+        for (int i = 1; i < tempLen; i++) {
             if (flag ^ comparison(temperatureSeries[i], limitTemp)) {
                 limitTemp = temperatureSeries[i];
             }
@@ -81,10 +87,11 @@ public class TemperatureSeriesAnalysis {
         double distance = Math.abs(temperatureSeries[0] - tempValue);
         double closestValue = temperatureSeries[0];
 
-        for (int i=1; i < tempLen; i++) {
+        for (int i = 1; i < tempLen; i++) {
             double currDistance = Math.abs(temperatureSeries[i] - tempValue);
 
-            if (currDistance == distance && temperatureSeries[i] > closestValue) {
+            if (currDistance == distance &&
+                    temperatureSeries[i] > closestValue) {
                 closestValue = temperatureSeries[i];
             }
 
@@ -100,7 +107,7 @@ public class TemperatureSeriesAnalysis {
         isValidLen();
 
         int newLen = 0;
-        for (int i=0; i < tempLen; i++) {
+        for (int i = 0; i < tempLen; i++) {
             if (flag ^ comparison(temperatureSeries[i], tempValue)) {
                 newLen++;
             }
@@ -138,7 +145,6 @@ public class TemperatureSeriesAnalysis {
             newLen = 1;
         }
         double[] newSeries = new double[newLen];
-        double[] temporarySeries;
 
 
         while (newSeries.length < tempLen + temps.length) {
@@ -153,6 +159,9 @@ public class TemperatureSeriesAnalysis {
 
         int k = 0;
         while (k < temps.length) {
+            if (temps[k] < -273.0) {
+                throw new InputMismatchException();
+            }
             newSeries[k+tempLen] = temps[k];
             k++;
         }

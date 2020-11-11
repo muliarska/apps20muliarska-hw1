@@ -15,8 +15,7 @@ public class TemperatureSeriesAnalysisTest {
         double[] temperatureSeriesOneEl = {-1.0};
         this.seriesAnalysisOneEl = new TemperatureSeriesAnalysis(temperatureSeriesOneEl);
 
-        double[] temperatureSeriesEmpty = {};
-        this.seriesAnalysisEmpty = new TemperatureSeriesAnalysis(temperatureSeriesEmpty);
+        this.seriesAnalysisEmpty = new TemperatureSeriesAnalysis();
 
         double[] temperatureSeriesManyEl = {3.0, -5.0, 1.0, 5.0};
         this.seriesAnalysisManyEl = new TemperatureSeriesAnalysis(temperatureSeriesManyEl);
@@ -195,6 +194,17 @@ public class TemperatureSeriesAnalysisTest {
         double actualResult = seriesAnalysisManyEl.findTempClosestToValue(4.0);
 
         assertEquals(expResult, actualResult, 0.00001);
+
+
+        // given 1.0 and -1.0 on the same distance from zero
+        double[] temperatureSeries = {3.0, -1.0, 1.0, 5.0};
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(temperatureSeries);
+
+        double expResult1 = 1.0;
+
+        double actualResult1 = seriesAnalysis.findTempClosestToValue(0.0);
+
+        assertEquals(expResult1, actualResult1, 0.00001);
     }
 
 
@@ -267,10 +277,10 @@ public class TemperatureSeriesAnalysisTest {
 
         TempSummaryStatistics statistics = seriesAnalysisOneEl.summaryStatistics();
 
-        assertEquals(statistics.avgTemp, expAvg, 0.00001);
-        assertEquals(statistics.devTemp, expDev, 0.00001);
-        assertEquals(statistics.minTemp, expMin, 0.00001);
-        assertEquals(statistics.maxTemp, expMax, 0.00001);
+        assertEquals(statistics.getAvgTemp(), expAvg, 0.00001);
+        assertEquals(statistics.getDevTemp(), expDev, 0.00001);
+        assertEquals(statistics.getMinTemp(), expMin, 0.00001);
+        assertEquals(statistics.getMaxTemp(), expMax, 0.00001);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -291,10 +301,10 @@ public class TemperatureSeriesAnalysisTest {
 
         TempSummaryStatistics statistics = seriesAnalysisManyEl.summaryStatistics();
 
-        assertEquals(statistics.avgTemp, expAvg, 0.00001);
-        assertEquals(statistics.devTemp, expDev, 0.00001);
-        assertEquals(statistics.minTemp, expMin, 0.00001);
-        assertEquals(statistics.maxTemp, expMax, 0.00001);
+        assertEquals(statistics.getAvgTemp(), expAvg, 0.00001);
+        assertEquals(statistics.getDevTemp(), expDev, 0.00001);
+        assertEquals(statistics.getMinTemp(), expMin, 0.00001);
+        assertEquals(statistics.getMaxTemp(), expMax, 0.00001);
     }
 
 
@@ -306,7 +316,7 @@ public class TemperatureSeriesAnalysisTest {
         seriesAnalysisOneEl.addTemps(newSeries);
 
         double[] expResult = {-1.0, 1.0, 4.0, 0.0};
-        double[] actualResult = seriesAnalysisOneEl.temperatureSeries;
+        double[] actualResult = seriesAnalysisOneEl.getTemperatureSeries();
 
         assertArrayEquals(expResult, actualResult, 0.00001);
     }
@@ -318,7 +328,7 @@ public class TemperatureSeriesAnalysisTest {
         seriesAnalysisEmpty.addTemps(newSeries);
 
         double[] expResult = {1.0, 4.0};
-        double[] actualResult = seriesAnalysisEmpty.temperatureSeries;
+        double[] actualResult = seriesAnalysisEmpty.getTemperatureSeries();
 
         assertArrayEquals(expResult, actualResult, 0.00001);
     }
@@ -331,7 +341,7 @@ public class TemperatureSeriesAnalysisTest {
         seriesAnalysisManyEl.addTemps(newSeries);
 
         double[] expResult = {3.0, -5.0, 1.0, 5.0, 1.0, 4.0, 0.0, 0.0};
-        double[] actualResult = seriesAnalysisManyEl.temperatureSeries;
+        double[] actualResult = seriesAnalysisManyEl.getTemperatureSeries();
 
         assertArrayEquals(expResult, actualResult, 0.00001);
     }
